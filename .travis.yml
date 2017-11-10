@@ -2,21 +2,24 @@ sudo: required
 notifications:
   email: false
 services:
-  - docker
+- docker
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::8}
   - REPO=verifybuild/java8
+  - secure: qWUvAH/0FtWk/nIufi6aQhjuUbr5gxnmiBE8vQdbn54Ty4Out/zhyTJ+4E0APhrTm8xNbiUXdNR0/46LdXwoXJMVyZZxBoEKcsv8lS4RvmTzavKrrGA1r9e7hyszzEi1g+azoyFO0ScYE5pVv7/fm7NGFry7VAnWp1/bx4B1+i3xaNCMXQUvHc6aJNXpZW/dCIbrL1NYoKgnL9NGCioydHLUv5K4MbSOg6Lxboln3rrEzfA8M6v60IKwTt8awdNHsJGyTcNCxZHu6VvXoDm4hWJa8vYiMozq/PcN9ihxkKNMqtvMx8rl9ZCz4GSdMc0dRDEAuzqi+YDD0Ibe2lBEOMXVCXCZ61+EtIXqZUkte9G0n594MpbRbXpHOI4lSCyaVaUg2sQTEyB+CvaaCkJgkcSiZ5xnj9SuFnZdlCSByehK4r3/OEocvIqY1f0VYc7B3CGyyXQ1VKZeIG0Bv3tSGjsGUhtVSF/pdZIjnysT15Ra04OE+ew6CcYu3WViflGd71525pmu//ElLAIHxJRV02n9O6vgQIKf1UdC5AFVa0mGArd8NjoiCO5u2COs1guuqN/sg685i8IjfBgMLx3J9xghom6YjkiHip7hO4o5AUb3fQ1029knvKq9yfUAWaNFyMW1D7AJJsrQHtnjSFRcFfusiwHrAsDrinvuG1sh8ww=
+  - secure: PosA6/qPGELHAAlhmG8ZE34o1r2t86ZLVW2oo9W2I7hnlejAYxp1tspwEtCgecEht/h6q3tbhsXtRwspbSKLIpt30P8ywVIu2XDGvh+6LppJNp7EWxW9jYtMKfooSCnVh4jN3VZNIayIRv/n2UBTMYQsu+2PVDj13zUeLzy1zRtWFz6WOb431CxW+hNsuKO0TiQqBfKL7tW9y8kAMUtJkRsI4wD+O8jKfcu8X0v6tj2gVkX1HOqgYZdME4Gbbb6FVkwHd/mrrrt1IPe80mQ0e7zA0mCAO/t2ZRb1ewZvIbFO7fPYh3AduRjnhhLkX9wopeV+KvqgxZVMeIXXidGPAFyGhms9mym+ghkC3X1FjQS2vflqF7IYINlB5ak4qjyoMhj7uXcNsUGnnieiyFkGp3Fst2kG7T+HceYKQA802Bc+kJOrR7dcduucddqOW9EiA+bfys0VbR0rJh2LFkgwsWoms1qKJNrQfBQKcKVPfuxcAfJYmSYNy5SgKDTwlUuOBHK1GYsC++cbs8BNAwsCzhORJ3sIj+s2tmOUYA3vyBd+SHoeksZc2hbCe5nkCtdh4rO+ulzrLlhL4j3DxCzeNzS+juVrjl9BmPoA5o7U4cENjU9cdd1JkA7FuUP/dA9WYS4076vnV/9wK6Z+qllwWMcwFfP+VLwr3PTuoanBUtg=
 before_install:
-  - apt-get update
-  - DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+- apt-get update
+- DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confnew" install
+  docker-ce
 script:
- - export TAG=$(if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
- - docker build -t $REPO:$TAG -f Dockerfile .
+- export TAG=$(if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master"
+  ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+- docker build -t $REPO:$TAG -f Dockerfile .
 after_success:
- - docker login -u $DOCKER_USER -p $DOCKER_PASS
- - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
-     docker tag $REPO:$TAG $REPO:$TRAVIS_BUILD_NUMBER;
-     docker push $REPO:$TRAVIS_BUILD_NUMBER;
-   fi 
- - docker push $REPO:$TAG
+- docker login -u $DOCKER_USER -p $DOCKER_PASS
+- if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
+  docker tag $REPO:$TAG $REPO:$TRAVIS_BUILD_NUMBER; docker push $REPO:$TRAVIS_BUILD_NUMBER;
+  fi
+- docker push $REPO:$TAG
