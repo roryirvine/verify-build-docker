@@ -10,6 +10,7 @@ env:
 before_install:
 - sudo apt-get update
 - DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+- sudo apt-get -y install curl
 script:
 - export TAG=$(if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
     echo "latest";
